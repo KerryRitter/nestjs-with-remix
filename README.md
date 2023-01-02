@@ -1,73 +1,40 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# NestJS with Remix
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This repo is a demo of getting Remix to be served via NestJS. In the future, I will package up the code and publish it as an NPM module after I've worked out the kinks.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Basic installation
 
-## Description
+1. Create a new NestJS app using `nest new`.
+2. Install `@remix-run/` packages: `npm i --save @remix-run/{express,node,react,serve}; npm i --save-dev @remix-run/{dev,eslint-config}`
+3. Install `concurrently` so we can run `remix watch` and `nest build --watch` at the same time: `npm i --save-dev concurrently`.
+4. Add the required Remix files from this repo: `remix.config.js`, `remix.env.d.ts`, `tsconfig.base.json`.
+5. Add the `app` directory from this repo.
+6. Add the `src/remix` directory from this repo.
+7. Update your `AppModule` to use `@RemixModule()` instead of `@Module()` and provide the required RemixConfig.
+8. Update the package.json `start:dev` script to match the one in this repo. This now will start the Remix and Nest builds.
+9. Relish in the glory of Remix and NestJS.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## How to get NestJS services in Remix Loader functions
 
-## Installation
+Use the `RemixController['getLoadContext']` function to pass services and data to Remix loaders via the `LoaderArgs['context']` property.
 
-```bash
-$ npm install
-```
+### Notable issue
 
-## Running the app
+Ideally, we can pass the whole NestJS IoC container and let loaders pluck services out from that (or do something even more clever). However, in trying to pass the singleton `ModuleRef` from NestJS ended up with a ton of Remix build errors due to missing packages (packages that are optionally required, but with how Remix builds, it wants them to exist or be wrapped in a try/catch).
 
-```bash
-# development
-$ npm run start
+## Caveats
 
-# watch mode
-$ npm run start:dev
+There's probably a fair bit of issues. I haven't tested this much yet. Feel free to report any issues. Truthfully, I probably will not address them but will happily merge and pull requests.
 
-# production mode
-$ npm run start:prod
-```
+## Future todo:
 
-## Test
+1. There should only be 1-2 steps to get started with this, not 8-9. I plan to make this a Remix template.
+2. Provide a way to get NestJS providers to Remix loaders. Alternatively, leverage NestJS to BE the loader function for a Remix view.
+3. Merge the NestJS and Remix builds into one process instead of using `concurrently`. This will remove unnecessary dependencies and hopefully make a more stable and friendly developer experience.
+4. Get hot module reloading for Remix changes through NestJS's dev server.
 
-```bash
-# unit tests
-$ npm run test
+## Additional
 
-# e2e tests
-$ npm run test:e2e
+Thanks to [AndrewsRodH](https://github.com/AndresRodH/remix-nestjs) for the starting point.
 
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+[Email](mailto:ritter@kerryritter.com). [Twitter](https://www.twitter.com/kerryritter). Discord [Kerry Ritter#6134].

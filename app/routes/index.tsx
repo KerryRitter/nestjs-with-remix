@@ -3,11 +3,14 @@ import { json } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 
 export function loader({ context }: LoaderArgs) {
-  return json(context.appService.getHello());
+  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+  context; // Use the remix.controller.ts getLoadContext function to pass data or services from NestJS.
+
+  return json('Hello earthlings');
 }
 
 export default function Index() {
-  const greeting = useLoaderData<typeof loader>();
+  const greeting = useLoaderData<string>();
 
   return (
     <div style={{ fontFamily: 'system-ui, sans-serif', lineHeight: '1.4' }}>
