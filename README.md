@@ -2,12 +2,16 @@
 
 This repo is a demo of getting Remix to be served via NestJS. In the future, I will package up the code and publish it as an NPM module after I've worked out the kinks.
 
-## Basic installation
+## Basic start-up
+
+1. Clone this repo.
+
+## Adding Remix to an existing NestJS project
 
 1. Create a new NestJS app using `nest new`.
 2. Install `@remix-run/` packages: `npm i --save @remix-run/{express,node,react,serve}; npm i --save-dev @remix-run/{dev,eslint-config}`
 3. Install `concurrently` so we can run `remix watch` and `nest build --watch` at the same time: `npm i --save-dev concurrently`.
-4. Add the required Remix files from this repo: `remix.config.js`, `remix.env.d.ts`, `tsconfig.base.json`.
+4. Add the required Remix files from this repo: `remix.config.js`, `remix.env.d.ts`. Copy the `tsconfig` files.
 5. Add the `app` directory from this repo.
 6. Add the `src/remix` directory from this repo.
 7. Update your `AppModule` to use `@RemixModule()` instead of `@Module()` and provide the required RemixConfig.
@@ -28,9 +32,9 @@ There's probably a fair bit of issues. I haven't tested this much yet. Feel free
 
 ## Future todo:
 
-1. There should only be 1-2 steps to get started with this, not 8-9. I plan to make this a Remix template.
-2. Provide a way to get NestJS providers to Remix loaders. Alternatively, leverage NestJS to BE the loader function for a Remix view.
-3. Merge the NestJS and Remix builds into one process instead of using `concurrently`. This will remove unnecessary dependencies and hopefully make a more stable and friendly developer experience.
+1. Provide a way to get NestJS providers to Remix loaders. Alternatively, leverage NestJS to BE the loader function for a Remix view.
+2. Pull the `src/remix` folder out into an NPM package after #1 is solved.
+3. Merge the NestJS and Remix builds into one process instead of using `concurrently`. This will remove unnecessary dependencies and hopefully make a more stable and friendly developer experience. However, there's lots of logic going into Remix's build that I am wary of.
 4. Get hot module reloading for Remix changes through NestJS's dev server.
 
 ## Additional

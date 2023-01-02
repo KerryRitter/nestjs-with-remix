@@ -6,7 +6,7 @@ export function loader({ context }: LoaderArgs) {
   // eslint-disable-next-line @typescript-eslint/no-unused-expressions
   context; // Use the remix.controller.ts getLoadContext function to pass data or services from NestJS.
 
-  return json('Hello earthlings');
+  return json('Hello earthlings!!');
 }
 
 export default function Index() {
